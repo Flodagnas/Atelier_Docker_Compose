@@ -41,7 +41,8 @@ volumes:
 Ce fichier décrit deux services : frontend et redis. Le service frontend est basé sur l'image Node.js et définit les variables d'environnement nécessaires pour se connecter à Redis. Le service redis utilise l'image Redis et n'a pas besoin de configuration supplémentaire.   
 
 3. Créez un fichier Dockerfile avec le contenu suivant :
-```FROM node:latest
+```Dockerfile
+FROM node:latest
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
