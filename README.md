@@ -19,3 +19,57 @@ Dans cette partie, vous allez créer une application multi-conteneurs avec Docke
 
 1. Créez un nouveau répertoire pour votre application et placez-vous dedans.
 2. Créez un fichier docker-compose.yml avec le contenu suivant :
+```
+version: '3.9'
+
+services:
+  frontend:
+    build: .
+    restart: always
+    ports:
+      - 80:3000
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379
+  redis:
+    image: redis:latest
+    restart: always
+volumes:
+  redis:
+```
+Ce fichier décrit deux services : frontend et redis. Le service frontend est basé sur l'image Node.js et définit les variables d'environnement nécessaires pour se connecter à Redis. Le service redis utilise l'image Redis et n'a pas besoin de configuration supplémentaire.   
+
+3. Créez un fichier Dockerfile avec le contenu suivant :
+```FROM node:latest
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD [ "npm", "start" ]
+```
+Ce fichier décrit la configuration du conteneur pour le service frontend.
+4. Créez un fichier index.js avec le contenu suivant :
+```js
+const express = require('express');
+const redis = require('redis');
+
+const app = express();
+const client = redis.createClient({
+  host: process.env.REDIS_URL || 'localhost',
+});
+
+app.get('/:room', (req, res) => {
+  const { room } = req.params;
+  client.incr(room, (err, count) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    res.send(`Salle ${room} : ${count}`);
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Server started on port 3000');
+});
+```
