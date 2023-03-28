@@ -206,6 +206,12 @@ const server = app.listen(process.env.PORT || 3000, () => {
 ```
 Ce code crée une connexion à la base de données MySQL et définit les routes /results et /vote pour récupérer les résultats des votes et ajouter un vote, respectivement.      
 5. Construisez et lancez les conteneurs en exécutant la commande suivante :     
-```bash
+```
 docker-compose up
 ```
+6. Testez l'application en accédant à l'URL http://localhost. Vous devriez voir une page avec des boutons pour voter pour les salles 1, 2, 3 et 4. Chaque fois que vous cliquez sur un bouton, le nombre de votes pour cette salle devrait augmenter.   
+7. Testez également la route /results en accédant à l'URL http://localhost/results. Vous devriez voir un objet JSON avec les résultats des votes pour chaque salle.   
+## Conclusion
+Dans ce TP, vous avez appris à utiliser Docker et Docker Compose pour créer une application Node.js avec une base de données Redis et MySQL. Vous avez également appris à utiliser les volumes pour partager des données entre les conteneurs.    
+
+Il existe de nombreuses autres fonctionnalités avancées dans Docker et Docker Compose, comme les réseaux, les variables d'environnement, les fichiers de configuration, les mises à l'échelle, etc. Vous pouvez continuer à explorer ces fonctionnalités pour créer des applications plus complexes et plus avancées.   
