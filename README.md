@@ -19,7 +19,7 @@ Dans cette partie, vous allez créer une application multi-conteneurs avec Docke
 
 1. Créez un nouveau répertoire pour votre application et placez-vous dedans.
 2. Créez un fichier docker-compose.yml avec le contenu suivant :
-```Docker-Compose
+```yml
 version: '3.9'
 
 services:
