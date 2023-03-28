@@ -18,7 +18,8 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 Dans cette partie, vous allez créer une application multi-conteneurs avec Docker Compose. Cette application sera basée sur une application de vote en temps réel à plusieurs salles avec Node.js et Redis.
 
 1. Créez un nouveau répertoire pour votre application et placez-vous dedans.    
-2. Créez un fichier docker-compose.yml avec le contenu suivant :    
+
+3. Créez un fichier docker-compose.yml avec le contenu suivant :    
 ```yml
 version: '3.9'
 
@@ -38,7 +39,7 @@ services:
 volumes:
   redis:
 ```
-Ce fichier décrit deux services : frontend et redis. Le service frontend est basé sur l'image Node.js et définit les variables d'environnement nécessaires pour se connecter à Redis. Le service redis utilise l'image Redis et n'a pas besoin de configuration supplémentaire.   
+Ce fichier décrit deux services : frontend et redis. Le service frontend est basé sur l'image Node.js et définit les variables d'environnement nécessaires pour se connecter à Redis. Le service redis utilise l'image Redis et n'a pas besoin de configuration supplémentaire.       
 
 3. Créez un fichier Dockerfile avec le contenu suivant :    
 ```Dockerfile
@@ -49,7 +50,8 @@ RUN npm install
 COPY . .
 CMD [ "npm", "start" ]
 ```
-Ce fichier décrit la configuration du conteneur pour le service frontend.
+Ce fichier décrit la configuration du conteneur pour le service frontend.    
+
 4. Créez un fichier index.js avec le contenu suivant :    
 ```js
 const express = require('express');
@@ -74,19 +76,24 @@ app.listen(3000, () => {
   console.log('Server started on port 3000');
 });
 ```
-Ce fichier décrit la logique de l'application de vote en temps réel. Lorsqu'un utilisateur visite une URL avec le numéro d'une salle, le serveur incrémente le compteur pour cette salle et renvoie le nombre actuel de votes pour cette salle.     
+Ce fichier décrit la logique de l'application de vote en temps réel. Lorsqu'un utilisateur visite une URL avec le numéro d'une salle, le serveur incrémente le compteur pour cette salle et renvoie le nombre actuel de votes pour cette salle.       
+  
 5. Exécutez la commande suivante pour démarrer les conteneurs :   
 ```
 docker-compose up -d
-```
+```    
+
 6. Vérifiez que les conteneurs sont en cours d'exécution avec la commande suivante :      
 ```
 docker-compose ps
 ```
-Vous devriez voir les deux conteneurs.    
-7. Testez l'application en accédant à l'URL http://localhost. Vous devriez voir une page avec des boutons pour voter pour les salles 1, 2, 3 et 4. Chaque fois que vous cliquez sur un bouton, le nombre de votes pour cette salle devrait augmenter.   
+Vous devriez voir les deux conteneurs.        
+
+7. Testez l'application en accédant à l'URL http://localhost. Vous devriez voir une page avec des boutons pour voter pour les salles 1, 2, 3 et 4. Chaque fois que vous cliquez sur un bouton, le nombre de votes pour cette salle devrait augmenter.       
+
 ## Étape 2 : Utiliser les volumes pour partager des données entre les conteneurs
-Dans cette partie, vous allez utiliser les volumes pour partager des données entre les conteneurs. Vous allez ajouter une base de données MySQL pour stocker les résultats des votes.     
+Dans cette partie, vous allez utiliser les volumes pour partager des données entre les conteneurs. Vous allez ajouter une base de données MySQL pour stocker les résultats des votes.         
+
 1. Modifiez le fichier docker-compose.yml comme suit :    
 ```yml
 version: '3.9'
@@ -123,7 +130,8 @@ volumes:
 ```
 Ce fichier ajoute un nouveau service db qui utilise l'image MySQL. Il définit également les variables d'environnement nécessaires pour se connecter à la base de données.     
 
-Le volume mysql est utilisé pour stocker les données de la base de données.     
+Le volume mysql est utilisé pour stocker les données de la base de données.        
+     
 2. Créez un fichier docker-entrypoint.sh avec le contenu suivant :      
 ```sh
 #!/bin/bash
@@ -141,13 +149,15 @@ fi
 
 exec "$@"
 ```
-Ce script sera utilisé comme point d'entrée pour le conteneur de la base de données MySQL. Il installe et configure la base de données si elle n'existe pas déjà.     
+Ce script sera utilisé comme point d'entrée pour le conteneur de la base de données MySQL. Il installe et configure la base de données si elle n'existe pas déjà.       
+  
 3. Modifiez le fichier docker-compose.yml pour ajouter les lignes suivantes au service db :     
 ```yml
 command: ["bash", "/docker-entrypoint.sh", "mysqld"]
 entrypoint: ["/usr/local/bin/docker-entrypoint.sh"]
 ```
 Ces lignes configurent le script docker-entrypoint.sh comme point d'entrée pour le conteneur de la base de données MySQL.     
+    
 4. Modifiez le fichier index.js pour ajouter le code suivant :    
 ```js
 const mysql = require('mysql');
@@ -205,11 +215,14 @@ const server = app.listen(process.env.PORT || 3000, () => {
 
 ```
 Ce code crée une connexion à la base de données MySQL et définit les routes /results et /vote pour récupérer les résultats des votes et ajouter un vote, respectivement.      
+    
 5. Construisez et lancez les conteneurs en exécutant la commande suivante :     
 ```
 docker-compose up
 ```
+    
 6. Testez l'application en accédant à l'URL http://localhost. Vous devriez voir une page avec des boutons pour voter pour les salles 1, 2, 3 et 4. Chaque fois que vous cliquez sur un bouton, le nombre de votes pour cette salle devrait augmenter.   
+    
 7. Testez également la route /results en accédant à l'URL http://localhost/results. Vous devriez voir un objet JSON avec les résultats des votes pour chaque salle.   
 
 ## Conclusion   
