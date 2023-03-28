@@ -17,8 +17,8 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 ## Étape 1 : Créer une application multi-conteneurs avec Docker Compose
 Dans cette partie, vous allez créer une application multi-conteneurs avec Docker Compose. Cette application sera basée sur une application de vote en temps réel à plusieurs salles avec Node.js et Redis.
 
-1. Créez un nouveau répertoire pour votre application et placez-vous dedans.
-2. Créez un fichier docker-compose.yml avec le contenu suivant :
+1. Créez un nouveau répertoire pour votre application et placez-vous dedans.    
+2. Créez un fichier docker-compose.yml avec le contenu suivant :    
 ```yml
 version: '3.9'
 
@@ -40,7 +40,7 @@ volumes:
 ```
 Ce fichier décrit deux services : frontend et redis. Le service frontend est basé sur l'image Node.js et définit les variables d'environnement nécessaires pour se connecter à Redis. Le service redis utilise l'image Redis et n'a pas besoin de configuration supplémentaire.   
 
-3. Créez un fichier Dockerfile avec le contenu suivant :
+3. Créez un fichier Dockerfile avec le contenu suivant :    
 ```Dockerfile
 FROM node:latest
 WORKDIR /app
@@ -50,7 +50,7 @@ COPY . .
 CMD [ "npm", "start" ]
 ```
 Ce fichier décrit la configuration du conteneur pour le service frontend.
-4. Créez un fichier index.js avec le contenu suivant :
+4. Créez un fichier index.js avec le contenu suivant :    
 ```js
 const express = require('express');
 const redis = require('redis');
@@ -75,7 +75,7 @@ app.listen(3000, () => {
 });
 ```
 Ce fichier décrit la logique de l'application de vote en temps réel. Lorsqu'un utilisateur visite une URL avec le numéro d'une salle, le serveur incrémente le compteur pour cette salle et renvoie le nombre actuel de votes pour cette salle.     
-5. Exécutez la commande suivante pour démarrer les conteneurs :
+5. Exécutez la commande suivante pour démarrer les conteneurs :   
 ```
 docker-compose up -d
 ```
@@ -84,7 +84,7 @@ docker-compose up -d
 docker-compose ps
 ```
 Vous devriez voir les deux conteneurs.    
-7. Testez l'application en accédant à l'URL http://localhost. Vous devriez voir une page avec des boutons pour voter pour les salles 1, 2, 3 et 4. Chaque fois que vous cliquez sur un bouton, le nombre de votes pour cette salle devrait augmenter.
+7. Testez l'application en accédant à l'URL http://localhost. Vous devriez voir une page avec des boutons pour voter pour les salles 1, 2, 3 et 4. Chaque fois que vous cliquez sur un bouton, le nombre de votes pour cette salle devrait augmenter.   
 ## Étape 2 : Utiliser les volumes pour partager des données entre les conteneurs
 Dans cette partie, vous allez utiliser les volumes pour partager des données entre les conteneurs. Vous allez ajouter une base de données MySQL pour stocker les résultats des votes.     
 1. Modifiez le fichier docker-compose.yml comme suit :    
@@ -211,7 +211,8 @@ docker-compose up
 ```
 6. Testez l'application en accédant à l'URL http://localhost. Vous devriez voir une page avec des boutons pour voter pour les salles 1, 2, 3 et 4. Chaque fois que vous cliquez sur un bouton, le nombre de votes pour cette salle devrait augmenter.   
 7. Testez également la route /results en accédant à l'URL http://localhost/results. Vous devriez voir un objet JSON avec les résultats des votes pour chaque salle.   
-## Conclusion
+
+## Conclusion   
 Dans ce TP, vous avez appris à utiliser Docker et Docker Compose pour créer une application Node.js avec une base de données Redis et MySQL. Vous avez également appris à utiliser les volumes pour partager des données entre les conteneurs.    
 
 Il existe de nombreuses autres fonctionnalités avancées dans Docker et Docker Compose, comme les réseaux, les variables d'environnement, les fichiers de configuration, les mises à l'échelle, etc. Vous pouvez continuer à explorer ces fonctionnalités pour créer des applications plus complexes et plus avancées.   
